@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -65,13 +66,7 @@ func RealMain(args []string) error {
 	}
 
 	if resp.Code != http.StatusOK {
-		slackClient.PostMessage(
-			"#feed_test",
-			slack.MsgOptionText(
-				resp.Message,
-				false,
-			),
-		)
+		log.Println(resp.Message)
 		return nil
 	}
 
@@ -91,10 +86,11 @@ func RealMain(args []string) error {
 		)
 
 		slackClient.PostMessage(
-			"#feed_test",
+			cfg.SlackConfig.Channel,
 			slack.MsgOptionText(
 				fmt.Sprintf(
-					":eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
+					"<@%s>\n:eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
+					cfg.SlackConfig.MemberID,
 					event.EventDate,
 					event.EventDateWeek,
 					event.ShopName,

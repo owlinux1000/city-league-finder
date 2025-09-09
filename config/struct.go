@@ -7,5 +7,13 @@ type Env struct {
 
 type Config struct {
 	Endpoint string `yaml:"endpoint"`
-	Prefecture []string `yaml:"prefecture"`
+	Prefecture []string `yaml:"prefecture"`	
+	SlackConfig SlackConfig `yaml:"slack"`
+
+}
+
+type SlackConfig struct {
+	Channel string `yaml:"channel"`
+	MemberID string `yaml:"memberID"`
+
 }
