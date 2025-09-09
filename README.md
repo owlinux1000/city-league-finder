@@ -17,6 +17,9 @@ endpoint: https://players.pokemon-card.com
 prefecture:
   - Kanagawa
   - Tokyo
+slack:
+  channel: "#your-channel"
+  memberID: your-member-id
 ```
 
 ### 3. Run this tool with the config
