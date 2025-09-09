@@ -65,7 +65,14 @@ func RealMain(args []string) error {
 	}
 
 	if resp.Code != http.StatusOK {
-		return errors.New(resp.Message)
+		slackClient.PostMessage(
+			"#feed_test",
+			slack.MsgOptionText(
+				resp.Message,
+				false,
+			),
+		)
+		return nil
 	}
 
 	eventDetailBaseURL := cfg.Endpoint + "/event/detail"
