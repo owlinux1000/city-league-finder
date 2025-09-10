@@ -14,8 +14,8 @@ import (
 	pref "github.com/diverse-inc/jp_prefecture"
 	"github.com/slack-go/slack"
 
-	"github.com/owlinux1000/city-league-cancel-dtector/client"
-	"github.com/owlinux1000/city-league-cancel-dtector/config"
+	"github.com/owlinux1000/city-league-cancel-detector/client"
+	"github.com/owlinux1000/city-league-cancel-detector/config"
 )
 
 var (
@@ -94,7 +94,7 @@ func RealMain(args []string) error {
 					event.EventDate,
 					event.EventDateWeek,
 					event.ShopName,
-					eventURL,					
+					eventURL,
 					event.Address,
 				),
 				false,

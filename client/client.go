@@ -8,14 +8,13 @@ import (
 	"net/url"
 )
 
-
 func NewClient(ctx context.Context, endpoint string) (*Client, error) {
 	client := &http.Client{
 		Transport: http.DefaultTransport,
 	}
 
 	return &Client{
-		client: client,
+		client:   client,
 		Endpoint: endpoint,
 	}, nil
 }
@@ -42,11 +41,11 @@ func (c *Client) EventSearch(ctx context.Context, query url.Values) (*EventSearc
 }
 
 func (c *Client) get(ctx context.Context, path string, query url.Values) (*http.Response, error) {
-	url := c.Endpoint + path	
+	url := c.Endpoint + path
 	if query != nil {
 		url += "?" + query.Encode()
 	}
-	
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err

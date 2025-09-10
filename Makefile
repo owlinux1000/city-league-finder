@@ -7,4 +7,7 @@ test: ## Run tests
 run: ## Run the program
 	@go run main.go
 
+build:
+	@go build -o bin/city-league-detector
+
 .PHONY: help test run
