@@ -4,7 +4,7 @@ on:
       - dev
 jobs:
   test:
-    uses: ./.github/workflows/reusable-actions/test.yaml
+    uses: ./.github/workflows/reusable-test.yaml
     permissions:
       contents: read
       actions: read
