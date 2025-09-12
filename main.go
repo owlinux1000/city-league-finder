@@ -2,24 +2,17 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strconv"
 	"strings"
 
-	pref "github.com/diverse-inc/jp_prefecture"
 	"github.com/slack-go/slack"
 
 	"github.com/owlinux1000/city-league-cancel-detector/client"
 	"github.com/owlinux1000/city-league-cancel-detector/config"
-)
-
-var (
-	NotFoundPrefectureName = errors.New("not found prefecture name")
 )
 
 func RealMain(args []string) error {
@@ -35,32 +28,19 @@ func RealMain(args []string) error {
 		return err
 	}
 
-	client, err := client.NewClient(ctx, cfg.Endpoint)
+	cl, err := client.NewClient(ctx, cfg.Endpoint)
 	if err != nil {
 		return err
 	}
 
 	slackClient := slack.New(env.SlackToken)
 
-	prefID := []string{}
-	for _, prefecture := range cfg.Prefecture {
-		prefInfo, ok := pref.FindByRoma(prefecture)
-		if !ok {
-			return fmt.Errorf("%w: %s", NotFoundPrefectureName, prefecture)
-		}
-		prefIDStr := strconv.Itoa(prefInfo.Code())
-		prefID = append(prefID, prefIDStr)
+	params, err := client.NewEventSearchParams(cfg)
+	if err != nil {
+		return err
 	}
 
-	values := url.Values{
-		"prefecture[]": prefID,
-		"event_type[]": []string{"3:2"}, // city league
-		"offset":       []string{"0"},
-		"accepting":    []string{"true"},
-		"order":        []string{"1"},
-	}
-
-	resp, err := client.EventSearch(ctx, values)
+	resp, err := cl.EventSearch(ctx, params)
 	if err != nil {
 		return err
 	}
@@ -79,7 +59,7 @@ func RealMain(args []string) error {
 			strconv.Itoa(event.ShopID),
 			event.EventDateParams,
 			strconv.Itoa(event.DateID),
-		}
+		}		
 		eventURL := strings.Join(
 			elems,
 			"/",
