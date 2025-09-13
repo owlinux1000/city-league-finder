@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
+
+	"golang.org/x/sync/errgroup"
 
 	"github.com/slack-go/slack"
 
@@ -50,37 +50,33 @@ func RealMain(args []string) error {
 		return nil
 	}
 
-	eventDetailBaseURL := cfg.Endpoint + "/event/detail"
+	g := new(errgroup.Group)
 	for _, event := range resp.Events {
-		elems := []string{
-			eventDetailBaseURL,
-			strconv.Itoa(event.EventHoldingID),
-			"1",
-			strconv.Itoa(event.ShopID),
-			event.EventDateParams,
-			strconv.Itoa(event.DateID),
-		}
-		eventURL := strings.Join(
-			elems,
-			"/",
+		g.Go(
+			func() error {
+				eventURL := cl.EventURL(&event)
+				_, _, err := slackClient.PostMessage(
+					cfg.SlackConfig.Channel,
+					slack.MsgOptionText(
+						fmt.Sprintf(
+							"<@%s>\n:eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
+							cfg.SlackConfig.MemberID,
+							event.EventDate,
+							event.EventDateWeek,
+							event.ShopName,
+							eventURL,
+							event.Address,
+						),
+						false,
+					),
+				)
+				if err != nil {
+					return err
+				}
+				return nil
+			},
 		)
-
-		_, _, err := slackClient.PostMessage(
-			cfg.SlackConfig.Channel,
-			slack.MsgOptionText(
-				fmt.Sprintf(
-					"<@%s>\n:eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
-					cfg.SlackConfig.MemberID,
-					event.EventDate,
-					event.EventDateWeek,
-					event.ShopName,
-					eventURL,
-					event.Address,
-				),
-				false,
-			),
-		)
-		if err != nil {
+		if err := g.Wait(); err != nil {
 			return err
 		}
 	}
