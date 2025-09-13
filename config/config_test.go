@@ -91,7 +91,8 @@ func TestLoadConfig(t *testing.T) {
 					Channel:  "#test",
 				},
 				DiscordConfig: DiscordConfig{
-					Webhook: "https://example.com",
+					MemberID: "test",
+					Webhook:  "https://example.com",
 				},
 			},
 		},
