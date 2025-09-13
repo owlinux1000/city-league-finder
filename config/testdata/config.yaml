@@ -1,10 +1,13 @@
-endpoint: https://players.pokemon-card.com
 prefecture:
   - Tokyo
   - Osaka
 league:
   - open
   - junior
+notifier: [slack, discord]
 slack:
   channel: "#test"
-  memberID: "test"
+  memberID: test
+discord:  
+  webhook: https://example.com
+  memberID: test

@@ -9,10 +9,10 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/slack-go/slack"
-
 	"github.com/owlinux1000/city-league-cancel-detector/client"
 	"github.com/owlinux1000/city-league-cancel-detector/config"
+	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier"
+	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier/model"
 )
 
 func RealMain(args []string) error {
@@ -33,8 +33,6 @@ func RealMain(args []string) error {
 		return err
 	}
 
-	slackClient := slack.New(env.SlackToken)
-
 	params, err := client.NewEventSearchParams(cfg)
 	if err != nil {
 		return err
@@ -50,27 +48,32 @@ func RealMain(args []string) error {
 		return nil
 	}
 
-	g := new(errgroup.Group)
+	notifiers := map[string]model.Notifier{}
+	for _, kind := range cfg.Notifier {
+		notifiers[kind], err = notifier.New(kind, env, cfg)
+		if err != nil {
+			return err
+		}
+	}
+
+	message := ""
 	for _, event := range resp.Events {
+		eventURL := cl.EventURL(&event)
+		message += fmt.Sprintf(
+			"2025/%s (%s) %s\nURL: %s\nAddress: %s\n\n",
+			event.EventDate,
+			event.EventDateWeek,
+			event.ShopName,
+			eventURL,
+			event.Address,
+		)
+	}
+
+	g := new(errgroup.Group)
+	for _, notifier := range notifiers {
 		g.Go(
 			func() error {
-				eventURL := cl.EventURL(&event)
-				_, _, err := slackClient.PostMessage(
-					cfg.SlackConfig.Channel,
-					slack.MsgOptionText(
-						fmt.Sprintf(
-							"<@%s>\n:eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
-							cfg.SlackConfig.MemberID,
-							event.EventDate,
-							event.EventDateWeek,
-							event.ShopName,
-							eventURL,
-							event.Address,
-						),
-						false,
-					),
-				)
-				if err != nil {
+				if err := notifier.PostMessage(message); err != nil {
 					return err
 				}
 				return nil
