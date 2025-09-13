@@ -36,7 +36,7 @@ Also you can mention a specific user by setting `memberID` field. The memberID i
 
 #### 2.2 Discord
 
-To notify the result to Discord, this tool uses Webhook. Therefore, you need to get a WebHook URL of the channel you want to post. The ways to get the URL is explained this official page. 
+To notify the result to Discord, this tool uses Webhook. Therefore, you need to get a Webhook URL of the channel you want to post. The ways to get the URL is explained this official page. 
 https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
 
 Also you can mention a specific user by setting `memberID` field. Once you enable the developer mode of Discord app from settings, you can see `Copy User ID` by right-click a user.
