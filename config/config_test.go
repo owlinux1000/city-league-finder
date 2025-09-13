@@ -106,10 +106,10 @@ func TestLoadConfig(t *testing.T) {
 			env, err := LoadConfig(ctx, tt.path)
 
 			if tt.expectedError != nil {
-				assert.ErrorContains(t, err, tt.expectedError.Error())
-				return
+				assert.ErrorIs(t, err, tt.expectedError)
+			} else {
+				assert.Equal(t, tt.expected, env)
 			}
-			assert.Equal(t, tt.expected, env)
 		})
 	}
 }
