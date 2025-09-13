@@ -1,0 +1,46 @@
+version: "2"
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - err113
+    - gocritic
+    - gocyclo
+    - gosec
+    - misspell
+    - nakedret
+    - nolintlint
+    - staticcheck
+  
+  settings:
+    govet:
+      enable:
+        - shadow
+  exclusions:
+    generated: lax
+    presets:
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - govet
+        text: 'shadow: declaration of "err" shadows declaration at'
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/owlinux1000
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

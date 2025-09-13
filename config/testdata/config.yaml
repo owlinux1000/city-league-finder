@@ -1,0 +1,10 @@
+endpoint: https://players.pokemon-card.com
+prefecture:
+  - Tokyo
+  - Osaka
+league:
+  - open
+  - junior
+slack:
+  channel: "#test"
+  memberID: "test"

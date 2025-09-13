@@ -4,10 +4,22 @@ help:
 test: ## Run tests
 	@go test ./...
 
+test/v : ## Run test with verbose mode
+	@go test -v ./...
+
 run: ## Run the program
 	@go run main.go
 
-build:
+build: ## Build the program
 	@go build -o bin/city-league-detector
 
-.PHONY: help test run
+fmt: ## Format the code
+	@golangci-lint fmt
+
+lint: ## Lint the code
+	@golangci-lint run
+
+lint/fix: ## Lint the code if it can be fixed by linters
+	@golangci-lint run --fix
+
+.PHONY: help test test/v run fmt lint lint/fix
