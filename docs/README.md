@@ -1,13 +1,13 @@
-# :eyes: City League Cancel Detector
+# :eyes: City League Finder
 
-This program aims to detect the cancellation of the current Pokemon Card City League. You can receive the result via some tools.
+This program aims to find the open slot of the current Pokemon Card City League. You can receive the result via some tools.
 
 ## How to use
 
 ### 1. Install this tool
 
 ```
-go install github.com/owlinux1000/city-league-cancel-detector@latest
+go install github.com/owlinux1000/city-league-finder@latest
 ```
 
 ### 2. Create a config file

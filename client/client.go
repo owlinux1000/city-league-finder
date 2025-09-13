@@ -12,7 +12,7 @@ import (
 
 	pref "github.com/diverse-inc/jp_prefecture"
 
-	"github.com/owlinux1000/city-league-cancel-detector/config"
+	"github.com/owlinux1000/city-league-finder/config"
 )
 
 var (

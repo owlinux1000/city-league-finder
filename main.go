@@ -9,10 +9,10 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/owlinux1000/city-league-cancel-detector/client"
-	"github.com/owlinux1000/city-league-cancel-detector/config"
-	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier"
-	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier/model"
+	"github.com/owlinux1000/city-league-finder/client"
+	"github.com/owlinux1000/city-league-finder/config"
+	"github.com/owlinux1000/city-league-finder/internal/notifier"
+	"github.com/owlinux1000/city-league-finder/internal/notifier/model"
 )
 
 func RealMain(args []string) error {

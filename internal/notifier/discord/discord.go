@@ -7,8 +7,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/owlinux1000/city-league-cancel-detector/config"
-	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier/model"
+	"github.com/owlinux1000/city-league-finder/config"
+	"github.com/owlinux1000/city-league-finder/internal/notifier/model"
 )
 
 func New(config *config.DiscordConfig) model.Notifier {

@@ -11,7 +11,7 @@ run: ## Run the program
 	@go run main.go
 
 build: ## Build the program
-	@go build -o bin/city-league-detector
+	@go build -o bin/city-league-finder
 
 fmt: ## Format the code
 	@golangci-lint fmt

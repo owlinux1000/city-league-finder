@@ -5,8 +5,8 @@ import (
 
 	"github.com/slack-go/slack"
 
-	"github.com/owlinux1000/city-league-cancel-detector/config"
-	"github.com/owlinux1000/city-league-cancel-detector/internal/notifier/model"
+	"github.com/owlinux1000/city-league-finder/config"
+	"github.com/owlinux1000/city-league-finder/internal/notifier/model"
 )
 
 func New(token string, config *config.SlackConfig) model.Notifier {

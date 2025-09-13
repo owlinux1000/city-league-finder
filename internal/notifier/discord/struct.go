@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"github.com/owlinux1000/city-league-cancel-detector/config"
+	"github.com/owlinux1000/city-league-finder/config"
 )
 
 type Notifier struct {
