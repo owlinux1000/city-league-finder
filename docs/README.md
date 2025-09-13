@@ -1,16 +1,20 @@
-# :eyes: City League Finder
+# 👀 City League Finder
+[![.github/workflows/test-and-lint.yaml](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml/badge.svg?branch=main)](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml)
 
-This program aims to find the open slot of the current Pokemon Card City League. You can receive the result via some tools.
+Find open slots for the current **Pokémon Card City League**—and get notified instantly.  
+Stay ahead of the crowd with results delivered straight to your favorite tools.
 
-## How to use
+---
 
-### 1. Install this tool
+## 🚀 Quick Start
 
-```
+### 1. Install
+
+```sh
 go install github.com/owlinux1000/city-league-finder@latest
 ```
 
-### 2. Create a config file
+### 2. Create a Config file
 
 > [!IMPORTANT]
 > You need to define one of notifier and its configuration.
@@ -20,33 +24,40 @@ prefecture:
   - Kanagawa
   - Tokyo
 notifier: [slack, discord]
+
 slack:
   channel: "#test"
   # memberID: test
+
 discord:
   webhook: https://example.com
   # memberID: test
+
 ```
 
-#### 2.1 Slack
+### 🔔 Notifier Setup
+#### Slack
 
-If you want to notify the result to Slack, you need to setup [Slack App](https://api.slack.com/apps). The required scopes of OAuth is `chat:write`. 
+To send results to Slack, you’ll need a Slack App.
+Make sure it has the `chat:write` OAuth scope.
 
-Also you can mention a specific user by setting `memberID` field. The memberID is that you can get your profile in your browswer.
+To mention a specific user, set the memberID field.
+You can find your member ID in your Slack profile (via browser).
 
-#### 2.2 Discord
+#### Discord
 
-To notify the result to Discord, this tool uses Webhook. Therefore, you need to get a Webhook URL of the channel you want to post. The ways to get the URL is explained this official page. 
-https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+For Discord, this tool uses webhooks.
+Grab a webhook URL for the channel you want to post to:  
+👉 [Intro to Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
-Also you can mention a specific user by setting `memberID` field. Once you enable the developer mode of Discord app from settings, you can see `Copy User ID` by right-click a user.
-https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID
+To mention a specific user, enable Developer Mode in Discord → right-click the user → Copy User ID.  
+👉 [Where to find User/Server/Message IDs](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID)
 
 
-### 3. Run this tool with the config
+### 3. Run
 
 ```sh
 $ export CONFIG_PATH=/path/to/config.yaml
-$ export SLACK_TOKEN=xoxb-<censord> # When you want to use Slack notifier
-$ city-league-cancel-detector
+$ export SLACK_TOKEN=xoxb-<censored>   # Required if using Slack
+$ city-league-finder
 ```
