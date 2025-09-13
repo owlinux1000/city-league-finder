@@ -7,6 +7,15 @@ type Client struct {
 	Endpoint string
 }
 
+type EventSearchParams struct {
+	Prefecture []string
+	EventType  []string
+	LeagueType []string
+	Offset     string
+	Accepting  string
+	Order      string
+}
+
 type EventSearchResponse struct {
 	Code       int     `json:"code"`
 	Message    string  `json:"message"`
