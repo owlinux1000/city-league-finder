@@ -52,7 +52,6 @@ func RealMain(args []string) error {
 
 	g := new(errgroup.Group)
 	for _, event := range resp.Events {
-		event := event
 		g.Go(
 			func() error {
 				eventURL := cl.EventURL(&event)
