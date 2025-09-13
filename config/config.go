@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/creasty/defaults"
+	"github.com/go-playground/validator/v10"
 	"github.com/sethvargo/go-envconfig"
 	"gopkg.in/yaml.v2"
 )
@@ -38,9 +39,41 @@ func LoadConfig(ctx context.Context, path string) (*Config, error) {
 		return nil, ErrFailedToDecodeStruct
 	}
 
+	if err := validate(&config); err != nil {
+		return nil, err
+	}
+
 	if err := defaults.Set(&config); err != nil {
 		return nil, err
 	}
 
 	return &config, nil
+}
+
+func validate(config *Config) error {
+	v := validator.New()
+	if err := v.Struct(config); err != nil {
+		return err
+	}
+
+	for _, kind := range config.Notifier {
+		switch kind {
+		case "slack":
+			if config.SlackConfig == (SlackConfig{}) {
+				return fmt.Errorf("%w: %s", ErrNotFoundNotifierConfig, kind)
+			}
+			if err := v.Struct(config.SlackConfig); err != nil {
+				return err
+			}
+		case "discord":
+			if config.DiscordConfig == (DiscordConfig{}) {
+				return fmt.Errorf("%w: %s", ErrNotFoundNotifierConfig, kind)
+			}
+			if err := v.Struct(config.DiscordConfig); err != nil {
+				return err
+			}
+		}
+	}
+
+	return v.Struct(config)
 }

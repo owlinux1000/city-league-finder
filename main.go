@@ -6,13 +6,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
 
-	"github.com/slack-go/slack"
+	"golang.org/x/sync/errgroup"
 
-	"github.com/owlinux1000/city-league-cancel-detector/client"
-	"github.com/owlinux1000/city-league-cancel-detector/config"
+	"github.com/owlinux1000/city-league-finder/client"
+	"github.com/owlinux1000/city-league-finder/config"
+	"github.com/owlinux1000/city-league-finder/internal/notifier"
+	"github.com/owlinux1000/city-league-finder/internal/notifier/model"
 )
 
 func RealMain(args []string) error {
@@ -33,8 +33,6 @@ func RealMain(args []string) error {
 		return err
 	}
 
-	slackClient := slack.New(env.SlackToken)
-
 	params, err := client.NewEventSearchParams(cfg)
 	if err != nil {
 		return err
@@ -50,37 +48,38 @@ func RealMain(args []string) error {
 		return nil
 	}
 
-	eventDetailBaseURL := cfg.Endpoint + "/event/detail"
-	for _, event := range resp.Events {
-		elems := []string{
-			eventDetailBaseURL,
-			strconv.Itoa(event.EventHoldingID),
-			"1",
-			strconv.Itoa(event.ShopID),
-			event.EventDateParams,
-			strconv.Itoa(event.DateID),
-		}
-		eventURL := strings.Join(
-			elems,
-			"/",
-		)
-
-		_, _, err := slackClient.PostMessage(
-			cfg.SlackConfig.Channel,
-			slack.MsgOptionText(
-				fmt.Sprintf(
-					"<@%s>\n:eyes: 2025/%s (%s) %s\nURL: %s\nAddress: %s",
-					cfg.SlackConfig.MemberID,
-					event.EventDate,
-					event.EventDateWeek,
-					event.ShopName,
-					eventURL,
-					event.Address,
-				),
-				false,
-			),
-		)
+	notifiers := map[string]model.Notifier{}
+	for _, kind := range cfg.Notifier {
+		notifiers[kind], err = notifier.New(kind, env, cfg)
 		if err != nil {
+			return err
+		}
+	}
+
+	message := ""
+	for _, event := range resp.Events {
+		eventURL := cl.EventURL(&event)
+		message += fmt.Sprintf(
+			"2025/%s (%s) %s\nURL: %s\nAddress: %s\n\n",
+			event.EventDate,
+			event.EventDateWeek,
+			event.ShopName,
+			eventURL,
+			event.Address,
+		)
+	}
+
+	g := new(errgroup.Group)
+	for _, notifier := range notifiers {
+		g.Go(
+			func() error {
+				if err := notifier.PostMessage(message); err != nil {
+					return err
+				}
+				return nil
+			},
+		)
+		if err := g.Wait(); err != nil {
 			return err
 		}
 	}

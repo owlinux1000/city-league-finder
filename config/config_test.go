@@ -85,9 +85,14 @@ func TestLoadConfig(t *testing.T) {
 				Offset:     0,
 				Order:      1,
 				Accepting:  true,
+				Notifier:   []string{"slack", "discord"},
 				SlackConfig: SlackConfig{
 					MemberID: "test",
 					Channel:  "#test",
+				},
+				DiscordConfig: DiscordConfig{
+					MemberID: "test",
+					Webhook:  "https://example.com",
 				},
 			},
 		},

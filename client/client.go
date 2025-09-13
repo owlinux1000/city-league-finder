@@ -8,10 +8,11 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	pref "github.com/diverse-inc/jp_prefecture"
 
-	"github.com/owlinux1000/city-league-cancel-detector/config"
+	"github.com/owlinux1000/city-league-finder/config"
 )
 
 var (
@@ -77,6 +78,23 @@ func (c *Client) get(ctx context.Context, path string, query url.Values) (*http.
 		return nil, err
 	}
 	return c.client.Do(req)
+}
+
+func (c *Client) EventURL(event *Event) string {
+	eventDetailBaseURL := c.Endpoint + "/event/detail"
+	elems := []string{
+		eventDetailBaseURL,
+		strconv.Itoa(event.EventHoldingID),
+		"1",
+		strconv.Itoa(event.ShopID),
+		event.EventDateParams,
+		strconv.Itoa(event.DateID),
+	}
+	eventURL := strings.Join(
+		elems,
+		"/",
+	)
+	return eventURL
 }
 
 func NewEventSearchParams(cfg *config.Config) (*EventSearchParams, error) {
