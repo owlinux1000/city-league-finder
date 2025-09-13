@@ -3,6 +3,6 @@ package main
 import "errors"
 
 var (
-	NotFoundPrefectureName = errors.New("not found prefecture name")
-	InvalidLeagueKind      = errors.New("invalid league kind")
+	ErrNotFoundPrefectureName = errors.New("not found prefecture name")
+	ErrInvalidLeagueKind      = errors.New("invalid league kind")
 )

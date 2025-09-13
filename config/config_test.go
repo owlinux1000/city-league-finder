@@ -33,7 +33,15 @@ func TestLoadEnv(t *testing.T) {
 				"SLACK_TOKEN": "censord",
 			},
 			expected:      nil,
-			expectedError: FailedToLoadEnv,
+			expectedError: ErrFailedToLoadEnv,
+		},
+		{
+			name: "failure with missing SLACK_TOKEN",
+			env: map[string]string{
+				"CONFIG_PATH": "/path/to/config.yaml",
+			},
+			expected:      nil,
+			expectedError: ErrFailedToLoadEnv,
 		},
 	}
 
@@ -48,9 +56,9 @@ func TestLoadEnv(t *testing.T) {
 
 			if tt.expectedError != nil {
 				assert.ErrorIs(t, err, tt.expectedError)
-				return
+			} else {
+				assert.Equal(t, tt.expected, env)
 			}
-			assert.Equal(t, tt.expected, env)
 
 			for k := range tt.env {
 				os.Unsetenv(k)
@@ -73,6 +81,10 @@ func TestLoadConfig(t *testing.T) {
 			expected: &Config{
 				Endpoint:   "https://players.pokemon-card.com",
 				Prefecture: []string{"Tokyo", "Osaka"},
+				LeagueKind: []string{"open", "junior"},
+				Offset:     0,
+				Order:      1,
+				Accepting:  true,
 				SlackConfig: SlackConfig{
 					MemberID: "test",
 					Channel:  "#test",
@@ -83,7 +95,7 @@ func TestLoadConfig(t *testing.T) {
 			name:          "failure with non existing config",
 			path:          "/path/to/non_existing_config.yaml",
 			expected:      nil,
-			expectedError: FailedToOpenFile,
+			expectedError: ErrFailedToOpenFile,
 		},
 	}
 
@@ -94,7 +106,7 @@ func TestLoadConfig(t *testing.T) {
 			env, err := LoadConfig(ctx, tt.path)
 
 			if tt.expectedError != nil {
-				assert.ErrorIs(t, err, tt.expectedError)
+				assert.ErrorContains(t, err, tt.expectedError.Error())
 				return
 			}
 			assert.Equal(t, tt.expected, env)

@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	pref "github.com/diverse-inc/jp_prefecture"
+
 	"github.com/owlinux1000/city-league-cancel-detector/config"
 )
 
@@ -39,19 +40,18 @@ func (c *Client) EventSearch(ctx context.Context, params *EventSearchParams) (*E
 		"prefecture[]":  params.Prefecture,
 		"event_type[]":  params.EventType,
 		"league_type[]": params.LeagueType,
-		"offset": []string{params.Offset},
-		"accepting": []string{params.Accepting},
-		"order": []string{params.Order},
+		"offset":        []string{params.Offset},
+		"accepting":     []string{params.Accepting},
+		"order":         []string{params.Order},
 	}
 
 	resp, err := c.get(ctx, eventSearchPath, query)
-	defer resp.Body.Close()
-	
 	if err != nil {
 		return nil, err
 	}
 
 	body, err := io.ReadAll(resp.Body)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func NewEventSearchParams(cfg *config.Config) (*EventSearchParams, error) {
 	for _, prefecture := range cfg.Prefecture {
 		prefInfo, ok := pref.FindByRoma(prefecture)
 		if !ok {
-			return nil, fmt.Errorf("%w: %s", NotFoundPrefectureName, prefecture)
+			return nil, fmt.Errorf("%w: %s", ErrNotFoundPrefectureName, prefecture)
 		}
 		prefIDStr := strconv.Itoa(prefInfo.Code())
 		prefID = append(prefID, prefIDStr)
@@ -95,7 +95,7 @@ func NewEventSearchParams(cfg *config.Config) (*EventSearchParams, error) {
 	for _, league := range cfg.LeagueKind {
 		l, ok := LeagueType[league]
 		if !ok {
-			return nil, fmt.Errorf("%w: %s", InvalidLeagueType, league)
+			return nil, fmt.Errorf("%w: %s", ErrInvalidLeagueType, league)
 		}
 		leagueType = append(leagueType, l)
 	}

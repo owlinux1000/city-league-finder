@@ -59,13 +59,13 @@ func RealMain(args []string) error {
 			strconv.Itoa(event.ShopID),
 			event.EventDateParams,
 			strconv.Itoa(event.DateID),
-		}		
+		}
 		eventURL := strings.Join(
 			elems,
 			"/",
 		)
 
-		slackClient.PostMessage(
+		_, _, err := slackClient.PostMessage(
 			cfg.SlackConfig.Channel,
 			slack.MsgOptionText(
 				fmt.Sprintf(
@@ -80,6 +80,9 @@ func RealMain(args []string) error {
 				false,
 			),
 		)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -92,5 +95,5 @@ func main() {
 		exitStatus = 1
 	}
 	os.Exit(exitStatus)
-	
+
 }
