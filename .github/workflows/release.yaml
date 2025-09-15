@@ -14,3 +14,5 @@ jobs:
         os:
           - macos-latest
           - macos-13
+    with:
+      os: "${{ matrix.os }}"
