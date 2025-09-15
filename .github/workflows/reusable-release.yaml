@@ -10,9 +10,6 @@ on:
         description: 'Path to the go version file'
         default: './go.mod'
         type: string
-      go_licenses_package:
-        description: 'Path to the target package for checking the licenses'
-        type: string
       cache-dependency-path:
         description: 'Path to the cache dependency file'
         default: './go.sum'
