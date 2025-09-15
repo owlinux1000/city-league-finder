@@ -1,0 +1,16 @@
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  release:
+    uses: ./.github/workflows/reusable-release.yaml
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - macos-13
