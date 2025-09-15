@@ -20,7 +20,7 @@ var versionCmd = &cobra.Command{
 	Short: "Display the version",
 	Long:  ``,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		
+
 		buildInfo, ok := debug.ReadBuildInfo()
 		if ok && Version == "" {
 			Version = buildInfo.Main.Version
@@ -30,14 +30,14 @@ var versionCmd = &cobra.Command{
 		s += fmt.Sprintf("  Version: \t%s\n", Version)
 		s += fmt.Sprintf("  Go version: \t%s\n", buildInfo.GoVersion)
 		for _, setting := range buildInfo.Settings {
-			switch setting.Key {			
+			switch setting.Key {
 			case "vcs.revision":
-				s += fmt.Sprintf("  Git commit: \t%s\n", setting.Value)			
+				s += fmt.Sprintf("  Git commit: \t%s\n", setting.Value)
 			case "vcs.time":
 				format, err := time.Parse(time.RFC3339, setting.Value)
 				if err != nil {
 					return err
-				}				
+				}
 				s += fmt.Sprintf("  Built: \t%s\n", format.Format(time.ANSIC))
 			}
 		}
