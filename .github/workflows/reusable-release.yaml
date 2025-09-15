@@ -50,7 +50,7 @@ jobs:
         run:
           github-comment exec -- go-licenses save . --save_path third_party_licenses
 
-      - name: Setup a directory for saving the exported licneses
+      - name: Setup a directory for saving the exported licenses
         run: mkdir -p third_party_licenses/go
 
       - name: Save the go license
