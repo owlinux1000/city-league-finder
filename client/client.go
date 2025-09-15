@@ -72,7 +72,6 @@ func (c *Client) get(ctx context.Context, path string, query url.Values) (*http.
 		url += "?" + query.Encode()
 	}
 
-	fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err

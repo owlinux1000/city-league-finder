@@ -8,7 +8,7 @@ import (
 
 type Env struct {
 	ConfigPath string `env:"CONFIG_PATH,required"`
-	SlackToken string `env:"SLACK_TOKEN,required"`
+	SlackToken string `env:"SLACK_TOKEN"`
 }
 
 type Config struct {

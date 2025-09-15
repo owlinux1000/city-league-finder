@@ -33,7 +33,6 @@ func (n *Notifier) PostMessage(message string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(jsonData))
 
 	resp, err := http.Post(n.config.Webhook, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -41,9 +40,7 @@ func (n *Notifier) PostMessage(message string) error {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println(resp.StatusCode)
-
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return err

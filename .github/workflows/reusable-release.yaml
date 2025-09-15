@@ -1,0 +1,50 @@
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system to run the tests on'
+        required: true
+        type: string
+      go-version-file:
+        description: 'Path to the go version file'
+        default: './go.mod'
+        type: string
+      cache-dependency-path:
+        description: 'Path to the cache dependency file'
+        default: './go.sum'
+        type: string
+      root:
+        description: 'The root of the go package'
+        default: './'
+        type: string
+jobs:
+  test:
+    runs-on: "${{ inputs.os }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version-file: "${{ inputs.go-version-file }}"
+          cache-dependency-path: "${{ inputs.cache-dependency-path }}"
+
+      - run: go-licenses save "$PACKAGE" --save_path third_party_licenses
+        env:
+          PACKAGE: ${{ inputs.go_licenses_package && inputs.go_licenses_package || format('./cmd/{0}', github.event.repository.name) }}
+
+      - run: mkdir -p third_party_licenses/go
+      - run: |
+          version=$(go env GOVERSION)
+          curl -Lq -o third_party_licenses/go/LICENSE --retry 5 "https://raw.githubusercontent.com/golang/go/refs/tags/go${version#go}/LICENSE"
+
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
+        with:
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

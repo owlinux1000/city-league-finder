@@ -11,7 +11,11 @@ run: ## Run the program
 	@go run main.go
 
 build: ## Build the program
-	@go build -o bin/city-league-finder
+	@go build -o bin/city-league-finder main.go
+
+release: ## Build the program with version
+
+	@go build -ldflags "-X github.com/owlinux1000/city-league-finder/cmd.Version=0.0.1" -o bin/city-league-finder
 
 fmt: ## Format the code
 	@golangci-lint fmt

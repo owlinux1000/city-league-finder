@@ -35,14 +35,6 @@ func TestLoadEnv(t *testing.T) {
 			expected:      nil,
 			expectedError: ErrFailedToLoadEnv,
 		},
-		{
-			name: "failure with missing SLACK_TOKEN",
-			env: map[string]string{
-				"CONFIG_PATH": "/path/to/config.yaml",
-			},
-			expected:      nil,
-			expectedError: ErrFailedToLoadEnv,
-		},
 	}
 
 	for _, tt := range tests {
