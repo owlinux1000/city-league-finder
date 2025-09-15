@@ -2,4 +2,4 @@ bin/
 # Added by goreleaser init:
 dist/
 
-third_party_license/
+third_party_licenses/
