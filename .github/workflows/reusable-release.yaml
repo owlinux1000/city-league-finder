@@ -19,7 +19,7 @@ on:
         default: './'
         type: string
 jobs:
-  test:
+  release:
     runs-on: "${{ inputs.os }}"
     steps:
       - name: Checkout

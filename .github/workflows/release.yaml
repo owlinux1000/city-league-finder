@@ -6,9 +6,7 @@ jobs:
   release:
     uses: ./.github/workflows/reusable-release.yaml
     permissions:
-      contents: read
-      actions: read
-      pull-requests: write
+      contents: write
     strategy:
       matrix:
         os:
