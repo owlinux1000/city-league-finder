@@ -43,9 +43,7 @@ jobs:
           go install github.com/suzuki-shunsuke/github-comment/v6/cmd/github-comment@v6.3.4
           
       - name: Check licenses
-        run:
-          github-comment exec -- go-licenses check .
-
+        run: github-comment exec -- go-licenses check .
       - name: Save the licenses
         run:
           github-comment exec -- go-licenses save . --save_path third_party_licenses
