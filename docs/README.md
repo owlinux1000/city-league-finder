@@ -17,20 +17,23 @@ go install github.com/owlinux1000/city-league-finder@latest
 ### 2. Create a Config file
 
 > [!IMPORTANT]
-> You need to define one of notifier and its configuration.
+> notifier doesn't work unless you set `true` to the `enabled` field.
 
 ```yaml
-prefecture: 
-  - Kanagawa
+prefecture:
   - Tokyo
-league: [open]
-notifier: [slack, discord]
-slack:
-  channel: "#test"
-  # memberID: test
-discord:
-  webhook: https://example.com
-  # memberID: test
+  - Osaka
+league:
+  - open
+  - junior
+notifier:
+  slack:
+    channel: "#test"
+    memberID: test
+  discord:  
+    webhook: https://example.com
+    memberID: test
+    enabled: true
 ```
 
 ### 🔔 Notifier Setup
