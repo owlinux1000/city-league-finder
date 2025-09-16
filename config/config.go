@@ -52,27 +52,18 @@ func LoadConfig(ctx context.Context, path string) (*Config, error) {
 
 func validate(config *Config) error {
 	v := validator.New()
-	if err := v.Struct(config); err != nil {
-		return err
-	}
 
-	for _, kind := range config.Notifier {
-		switch kind {
-		case "slack":
-			if config.SlackConfig == (SlackConfig{}) {
-				return fmt.Errorf("%w: %s", ErrNotFoundNotifierConfig, kind)
-			}
-			if err := v.Struct(config.SlackConfig); err != nil {
-				return err
-			}
-		case "discord":
-			if config.DiscordConfig == (DiscordConfig{}) {
-				return fmt.Errorf("%w: %s", ErrNotFoundNotifierConfig, kind)
-			}
-			if err := v.Struct(config.DiscordConfig); err != nil {
-				return err
-			}
+	switch {
+	case config.NotifierConfig.Slack != nil && config.NotifierConfig.Slack.Enabled:
+		if err := v.Struct(config.NotifierConfig.Slack); err != nil {
+			return err
 		}
+	case config.NotifierConfig.Discord != nil && config.NotifierConfig.Discord.Enabled:
+		if err := v.Struct(config.NotifierConfig.Discord); err != nil {
+			return err
+		}
+	default:
+		return ErrNotFoundNotifierConfig
 	}
 
 	return v.Struct(config)

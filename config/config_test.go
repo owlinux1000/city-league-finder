@@ -77,22 +77,45 @@ func TestLoadConfig(t *testing.T) {
 				Offset:     0,
 				Order:      1,
 				Accepting:  true,
-				Notifier:   []string{"slack", "discord"},
-				SlackConfig: SlackConfig{
-					MemberID: "test",
-					Channel:  "#test",
-				},
-				DiscordConfig: DiscordConfig{
-					MemberID: "test",
-					Webhook:  "https://example.com",
+				NotifierConfig: NotifierConfig{
+					Slack: &SlackConfig{
+						MemberID: "test",
+						Channel:  "#test",
+						Enabled:  false,
+					},
+					Discord: &DiscordConfig{
+						MemberID: "test",
+						Webhook:  "https://example.com",
+						Enabled:  true,
+					},
 				},
 			},
+		},
+		{
+			name: "failure with no notifier config",
+			path: "testdata/config_no_notifier.yaml",
+			expected: &Config{
+				Endpoint:       "https://players.pokemon-card.com",
+				Prefecture:     []string{"Tokyo", "Osaka"},
+				LeagueKind:     []string{"open", "junior"},
+				Offset:         0,
+				Order:          1,
+				Accepting:      true,
+				NotifierConfig: NotifierConfig{},
+			},
+			expectedError: ErrNotFoundNotifierConfig,
 		},
 		{
 			name:          "failure with non existing config",
 			path:          "/path/to/non_existing_config.yaml",
 			expected:      nil,
 			expectedError: ErrFailedToOpenFile,
+		},
+		{
+			name:          "failure with invalid yaml config",
+			path:          "testdata/invalid.yaml",
+			expected:      nil,
+			expectedError: ErrFailedToDecodeStruct,
 		},
 	}
 

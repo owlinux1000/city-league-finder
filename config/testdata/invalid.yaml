@@ -1,0 +1,10 @@
+prefecture:
+  - Tokyo
+  - Osaka
+league:
+  - open
+  - junior
+notifier:
+  slack
+    channel: "#test"
+    memberID: test

@@ -108,7 +108,7 @@ func NewEventSearchParams(cfg *config.Config) (*EventSearchParams, error) {
 		prefID = append(prefID, prefIDStr)
 	}
 
-	leagueType := []string{""}
+	leagueType := []string{}
 	for _, league := range cfg.LeagueKind {
 		l, ok := LeagueType[league]
 		if !ok {

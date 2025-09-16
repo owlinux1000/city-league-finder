@@ -6,7 +6,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -42,12 +41,9 @@ var runCmd = &cobra.Command{
 			return err
 		}
 
-		notifiers := map[string]model.Notifier{}
-		for _, kind := range cfg.Notifier {
-			notifiers[kind], err = notifier.New(kind, env, cfg)
-			if err != nil {
-				return err
-			}
+		notifiers, err := notifier.NewNotifiers(env, &cfg.NotifierConfig)
+		if err != nil {
+			return err
 		}
 
 		if err := run(ctx, cl, cfg, notifiers); err != nil {
@@ -63,7 +59,11 @@ func init() {
 	rootCmd.AddCommand(runCmd)
 }
 
-func run(ctx context.Context, cl *client.Client, cfg *config.Config, notifiers map[string]model.Notifier) error {
+func run(ctx context.Context, cl client.ClientAdapter, cfg *config.Config, notifiers []model.Notifier) error {
+	if len(notifiers) == 0 {
+		return ErrNotFoundNotifierConfig
+	}
+
 	params, err := client.NewEventSearchParams(cfg)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func run(ctx context.Context, cl *client.Client, cfg *config.Config, notifiers m
 	}
 
 	if resp.Code != http.StatusOK {
-		log.Println(resp.Message)
+		fmt.Println(resp.Message)
 		return nil
 	}
 
