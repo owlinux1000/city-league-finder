@@ -5,7 +5,9 @@ on:
 jobs:
   check_changed_files:
     uses: ./.github/workflows/reusable-pre-check.yaml
-    
+    permissions:
+      contents: read
+
   test:
     needs: check_changed_files
     if: ${{ needs.check_changed_files.outputs.go == 'true' }}
