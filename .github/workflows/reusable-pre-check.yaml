@@ -46,10 +46,10 @@ jobs:
           done
 
           if $go_changed; then
-            echo "go=true"
+            echo "go=true" >> $GITHUB_OUTPUT
           fi
 
           if $workflow_changed; then
-            echo "workflow=true"
+            echo "workflow=true" >> $GITHUB_OUTPUT
           fi
   
