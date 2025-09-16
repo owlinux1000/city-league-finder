@@ -19,20 +19,20 @@ jobs:
     strategy:
       matrix:
         test:
-          - os: macos-13
           - os: macos-latest
+          - os: ubuntu-latest
             report-coverage: true
       fail-fast: false
-    name: MacOS test (${{ matrix.test.os }})
+    name: Test (${{ matrix.test.os }})
     with:
       os: "${{ matrix.test.os }}"
       report-coverage: ${{ matrix.test.report-coverage || false }}
       pull-request-number: "${{ github.event.pull_request.number }}"
   lint:
     needs: check_changed_files
-    if: ${{ needs.check_changed_files.outputs.workflow == 'true' }}
+    if: ${{ needs.check_changed_files.outputs.go == 'true' }}
     name: Lint Go code
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       actions: read

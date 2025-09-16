@@ -30,7 +30,7 @@ jobs:
           go=false
           workflow=false
 
-          for file in ${ALL_CHANGED_FILES}; do
+          while IFS= read -r file; do
             if [[ "$file" == *.go ]]; then
               go=true
             fi
@@ -38,8 +38,8 @@ jobs:
             if [[ "$file" == .github/workflows/* ]]; then
               workflow=true
             fi
-          done
+          done <<< "$ALL_CHANGED_FILES"
 
-          echo "go=$go" >> $GITHUB_OUTPUT
-          echo "workflow=$workflow" >> $GITHUB_OUTPUT
+          echo "go=$go" >> "$GITHUB_OUTPUT"
+          echo "workflow=$workflow" >> "$GITHUB_OUTPUT"
   
