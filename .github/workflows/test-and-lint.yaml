@@ -7,7 +7,8 @@ jobs:
     uses: ./github/workflows/reusable-pre-check.yaml
     
   test:
-    if: ${{ jobs.check_changed_files.outputs.go == 'true' }}
+    needs: check_changed_files
+    if: ${{ needs.check_changed_files.outputs.go == 'true' }}
     uses: ./.github/workflows/reusable-test.yaml
     permissions:
       contents: read
@@ -26,7 +27,8 @@ jobs:
       report-coverage: ${{ matrix.test.report-coverage || false }}
       pull-request-number: "${{ github.event.pull_request.number }}"
   lint:
-    if: ${{ jobs.check_changed_files.outputs.workflow == 'true' }}
+    needs: check_changed_files
+    if: ${{ needs.check_changed_files.outputs.workflow == 'true' }}
     name: Lint Go code
     runs-on: macos-latest
     permissions:
