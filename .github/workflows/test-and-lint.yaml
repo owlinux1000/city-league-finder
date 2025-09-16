@@ -1,9 +1,13 @@
 on:
   pull_request:
     branches:
-      - main
+      - dev
 jobs:
+  check_changed_files:
+    uses: ./github/workflows/reusable-pre-check.yaml
+    
   test:
+    if: ${{ jobs.check_changed_files.outputs.go == "true" }}
     uses: ./.github/workflows/reusable-test.yaml
     permissions:
       contents: read
@@ -22,6 +26,7 @@ jobs:
       report-coverage: ${{ matrix.test.report-coverage || false }}
       pull-request-number: "${{ github.event.pull_request.number }}"
   lint:
+    if: ${{ jobs.check_changed_files.outputs.go == "true" }}
     name: Lint Go code
     runs-on: macos-latest
     permissions:
@@ -46,4 +51,17 @@ jobs:
           go_version_file: "./go.mod"
           reporter: github-pr-review
           fail_level: error
-
+  check-all-results:
+    name: Check if all the status is passed
+    if: always()
+    runs-on: [macos-13]
+    needs: [check_changed_files, test, lint]
+    steps:
+      - run: exit 1
+        if: >-
+          ${{
+            github.event.action != 'closed' && 
+            (
+              contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+            )
+          }}
