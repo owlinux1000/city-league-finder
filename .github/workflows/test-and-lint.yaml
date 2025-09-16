@@ -4,7 +4,7 @@ on:
       - dev
 jobs:
   check_changed_files:
-    uses: ./github/workflows/reusable-pre-check.yaml
+    uses: ./.github/workflows/reusable-pre-check.yaml
     
   test:
     needs: check_changed_files
