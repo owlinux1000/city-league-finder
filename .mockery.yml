@@ -1,0 +1,19 @@
+all: true
+dir: '{{.InterfaceDir}}/mocks'
+filename: mocks_{{.InterfaceName}}.go
+force-file-write: true
+formatter: goimports
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+pkgname: '{{.SrcPackageName}}'
+recursive: false
+template: testify
+packages:
+  github.com/owlinux1000/city-league-finder/client:
+    interfaces:
+      ClientAdapter:
+        config:
+  github.com/owlinux1000/city-league-finder/internal/notifier/model:
+    interfaces:
+      Notifier:
+        config:

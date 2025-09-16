@@ -1,5 +1,5 @@
 # 👀 City League Finder
-[![.github/workflows/test-and-lint.yaml](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml/badge.svg)](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml)
+[![.github/workflows/test-and-lint.yaml](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml/badge.svg)](https://github.com/owlinux1000/city-league-finder/actions/workflows/test-and-lint.yaml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Find open slots for the current **Pokémon Card City League**—and get notified instantly.  
 Stay ahead of the crowd with results delivered straight to your favorite tools.

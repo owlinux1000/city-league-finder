@@ -4,10 +4,11 @@ prefecture:
 league:
   - open
   - junior
-notifier: [slack, discord]
-slack:
-  channel: "#test"
-  memberID: test
-discord:  
-  webhook: https://example.com
-  memberID: test
+notifier:
+  slack:
+    channel: "#test"
+    memberID: test
+  discord:  
+    webhook: https://example.com
+    memberID: test
+    enabled: true

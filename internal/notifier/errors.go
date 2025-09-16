@@ -3,5 +3,5 @@ package notifier
 import "errors"
 
 var (
-	ErrInvalidNotifierKind = errors.New("invalid notifier kind")
+	ErrNotFoundNotifierConfig = errors.New("not found notifier config")
 )
