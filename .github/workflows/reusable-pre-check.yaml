@@ -4,10 +4,10 @@ on:
     outputs:
       go:
         description: this is going to be true when go code is changed
-        value: ${{ jobs.changed-files.go }}      
+        value: ${{ jobs.changed-files.outputs.go }}      
       workflow:
         description: this is going to be true when workflow files are changed
-        value: ${{ jobs.changed-files.workflow }}
+        value: ${{ jobs.changed-files.outputs.workflow }}
 jobs:
   changed-files:
     runs-on: ubuntu-latest
@@ -40,11 +40,6 @@ jobs:
             fi
           done
 
-          if $go_changed; then
-            echo "go=true" >> $GITHUB_OUTPUT
-          fi
-
-          if $workflow_changed; then
-            echo "workflow=true" >> $GITHUB_OUTPUT
-          fi
+          echo "go=$go" >> $GITHUB_OUTPUT
+          echo "workflow=$workflow" >> $GITHUB_OUTPUT
   
